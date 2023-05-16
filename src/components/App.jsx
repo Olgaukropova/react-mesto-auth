@@ -8,6 +8,14 @@ import { CurrentUserContext } from '../../src/context/CurrentUserContext.js';
 import EditProfilePopup from './EditProfilePopup.jsx';
 import EditAvatarPopup from './EditAvatarPopup.jsx';
 import AddPlacePopup from './AddPlacePopup.jsx';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import Login from './Login.jsx';
+import Register from './Register.jsx';
+import InfoTooltip from './InfoTooltip';
+import ProtectedRoute from './ProtectedRoute.jsx';
+import * as auth from './../utils/auth.js';
+
+
 
 function App() {
   const [openEditPopup, setEditOpenPopup] = React.useState(false);
@@ -17,6 +25,10 @@ function App() {
   const [openImage, setOpenImage] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+
+  const navigate = useNavigate();
+
 
   React.useEffect(() => {
     Promise.all([api.getInitialCards(), api.getUserInfo()])
@@ -98,40 +110,97 @@ function App() {
       .catch((err) => {
         console.error(err);
       });
-  }
+    }
+    const handleRegister = ({ email, password }) => {
+      auth.register(email, password)
+        .then((data) => {
+          if (data) {
+            navigate('/sign-in')
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+    }
+
+    const handleLogin = ({ email, password }) => {
+      auth.authorize(email, password)
+      .then((res)=>{
+        localStorage.setItem('token', res.token);
+        setLoggedIn(true);
+        navigate('/')        
+      })
+      
+      .catch((err) => {
+        console.error(err);
+      })
+    }
+
+  
   return (
-    <div className="App">
+    <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <CurrentUserContext.Provider value={currentUser}>
-          <Header />
-          <Main onEditPopup={handleEditProfileClick}
-            onAddProfile={handleAddPlaceClick}
-            onAvatarPopup={handleEditAvatarClick}
-            handleCardClick={handleCardClick}
-            handleCardLike={handleCardLike}
-            handleCardDelete={handleCardDelete}
-            cards={cards}
-          />
-          <Footer />
-          <EditProfilePopup isOpen={openEditPopup}
-            onClose={closeAllPopups}
-            onUpdateUser={handleUpdateUser} />
-          <EditAvatarPopup
-            isOpen={openAvatarPopup}
-            onClose={closeAllPopups}
-            onUpdateAvatar={handleUpdateAvatar} />
-          <AddPlacePopup
-            isOpen={openAddPopup}
-            onClose={closeAllPopups}
-            onAddPlace={handleAddPlaceSubmit} />
-          <ImagePopup
-            isOpen={openImage}
-            onClose={closeAllPopups}
-            card={selectedCard}
-          />
-        </CurrentUserContext.Provider>
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Header
+                text='Выйти'
+              />
+              <ProtectedRoute element={Main}
+                onEditPopup={handleEditProfileClick}
+                onAddProfile={handleAddPlaceClick}
+                onAvatarPopup={handleEditAvatarClick}
+                handleCardClick={handleCardClick}
+                handleCardLike={handleCardLike}
+                handleCardDelete={handleCardDelete}
+                cards={cards}
+              />
+              <Footer />
+            </>
+          } />
+
+          <Route path="/sign-up" element={
+            <>
+              <Header
+                text='Войти' />
+              <Register
+                onRegister={handleRegister} />
+            </>
+          } />
+
+          <Route path="/sign-in" element={
+            <>
+              <Header
+                text='Регистрация' />
+              <Login 
+              onLogin ={handleLogin}/>
+            </>
+          } />
+
+
+
+        </Routes>
+
+
+
+        <EditProfilePopup isOpen={openEditPopup}
+          onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser} />
+        <EditAvatarPopup
+          isOpen={openAvatarPopup}
+          onClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar} />
+        <AddPlacePopup
+          isOpen={openAddPopup}
+          onClose={closeAllPopups}
+          onAddPlace={handleAddPlaceSubmit} />
+        <ImagePopup
+          isOpen={openImage}
+          onClose={closeAllPopups}
+          card={selectedCard}
+        />
       </div>
-    </div >
+    </CurrentUserContext.Provider>
   );
 }
 
