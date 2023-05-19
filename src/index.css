@@ -5,6 +5,7 @@
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__registration/header__registration.css);
 @import url(./blocks/header/__text/header__text.css);
+@import url(./blocks/header/__info/header__info.css);
 
 @import url(./blocks/logo/logo.css);
 @import url(./blocks/profile/profile.css);
@@ -29,10 +30,13 @@
 @import url(./blocks/element/__image-heart/_active/element__image-heart_active.css);
 @import url(./blocks/footer/__text/footer__text.css);
 @import url(./blocks/popup/popup.css);
+@import url(./blocks/popup/__info/popup__info.css);
 @import url(./blocks/popup/_foto/popup_foto.css);
 @import url(./blocks/popup/__label/popup__label.css);
 @import url(./blocks/popup/__content/popup__content.css);
 @import url(./blocks/popup/__image/popup__image.css);
+@import url(./blocks/popup/__infoTooltip_image/popup__infoTooltip_image.css);
+@import url(./blocks/popup/___infoTooltip_text/popup___infoTooltip_text.css);
 @import url(./blocks/popup/_opened/popup_opened.css);
 @import url(./blocks/popup/popup__form-delete/popup__form-delete.css);
 @import url(./blocks/popup/__container/popup__container.css);
