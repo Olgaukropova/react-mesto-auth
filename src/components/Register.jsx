@@ -1,4 +1,6 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+
 
 function Register({ onRegister }) {
 
@@ -32,7 +34,7 @@ function Register({ onRegister }) {
         <input className="form__input" type="email" placeholder="Email" onChange={handleChangeEmail} value={email.email} />
         <input className="form__input" type="password" placeholder="Пароль" onChange={handleChangePassword} value={password.password} minLength="3" maxLength="10" />
         <button className="form__button">Зарегистрироваться</button>
-        <p className="form__text">Уже зарегистрированы? Войти</p>
+        <p className="form__text">Уже зарегистрированы? <Link className='form__text_link' to='/sign-in'>Войти</Link> </p>
       </form>
     </main>
   )
