@@ -73,17 +73,20 @@ function App() {
       .then((data) => {
         if (data.error) {
           setInfopopup({ text: 'Что-то пошло не так! Попробуйте ещё раз', image: not });
-          
+
         }
         else {
+          console.log('tut')
           setInfopopup({ text: 'Вы успешно зарегистрировались!', image: ok });
           navigate('/sign-in', { replace: true })
         }
-        
-      })
-      .catch(() => {
 
       })
+      .catch((err) => {
+        setInfopopup({ text: 'Что-то пошло не так! Попробуйте ещё раз', image: not});
+        console.error(err);
+      }
+      )
       .finally(handleInfoTooltip)
   }
 
@@ -101,13 +104,11 @@ function App() {
   //* Проверка токена и авторизация пользователя
   React.useEffect(() => {
     const jwt = localStorage.getItem('token');
-    setEmailUser(localStorage.getItem('email'));
+    //
     if (jwt) {
       auth.getContent(jwt)
-        .then((data) => {
-          //email после обновления пропадал в этом случае
-          //console.log(data.email, 'data.email')
-          //setEmailUser(data.email);
+        .then(() => {
+          setEmailUser(localStorage.getItem('email'));
           setLoggedIn(true);
           navigate("/");
         })

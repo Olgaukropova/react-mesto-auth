@@ -26,7 +26,7 @@ function Main({ onAvatarPopup, onEditPopup, onAddProfile, handleCardClick,
       <section className="elements">
         {
           cards.map((card, id) =>
-          (<Card card={card} key={id} name={card.name} link={card.link} likes={card.likes.length}
+          (<Card card={card}  key={card._id}  name={card.name} link={card.link} likes={card.likes.length}
             onCardClick={() => handleCardClick(card)} onCardLike={() => handleCardLike(card)}
             onCardDelete={() => handleCardDelete(card)}
           />))
